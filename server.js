@@ -30,16 +30,17 @@ app.get('/', function(req, res){
   
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
-  const url = req.body.url;
-  const result = validateURL(url)  res.json({original_url: url});
+  const urlString = req.body.url;
+  const result = validateURL(urlString)
+  res.json({original_url: urlString});
 });
 
 
-function validateURL(url) {
+function validateURL(urlString) {
   const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i
-  if (reURL.test(url)) {
-    reHost = 
-    const host = url.match
+  if (reURL.test(urlString)) {
+    const host = url.parse(urlString).hostname
+    dns.loockup(host, function (
   }
   
 }
