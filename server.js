@@ -30,9 +30,13 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const url = req.body.url;
-  res.json({original_url: url});
+  const result = validateURL(url)  res.json({original_url: url});
 });
 
+
+function validateURL(url) {
+  
+}
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
