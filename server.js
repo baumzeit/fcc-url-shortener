@@ -33,7 +33,7 @@ app.get('/', function(req, res){
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
   const result = validateURL(urlString);
-  res.json({original_url: urlString});
+  res.json({original_url: result});
 });
 
 
@@ -44,6 +44,7 @@ function validateURL(urlString) {
     const host = url.parse(urlString).hostname;
     const result = dns.lookup(host, function (err, address) {
       if (err) {
+        console.log("host error")
         return errorMsg = "invalid hostname"; 
       }
     });
