@@ -39,18 +39,18 @@ app.post("/api/shorturl/new", function (req, res) {
 
 function validateURL(urlString) {
   const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+  let errorMsg = "";
   if (reURL.test(urlString)) {
     const host = url.parse(urlString).hostname;
-    dns.lookup(host, function (err, address) {
+    const result = dns.lookup(host, function (err, address) {
       if (err) {
-        console.log(err)  
+        return errorMsg = "invalid hostname"; 
       }
-      else {
-        console.log(address)  
-      }
-    })
+    });
+  } else {
+    errorMsg = 'invalid url';
   }
-  
+  return errorMsg
 }
 
 app.listen(port, function () {
