@@ -35,6 +35,10 @@ app.post("/api/shorturl/new", function (req, res) {
 
 
 function validateURL(url) {
+  const re = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i
+  if (re.test(url)) {
+      
+  }
   
 }
 
