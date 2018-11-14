@@ -95,7 +95,9 @@ function consultWithDatabase (validUrl) {
           resolve(createAndSavePair(validUrl))
         }
       })
-      .catch((error) => {throw error});
+      .catch(function(error) {
+        throw error;
+      });
     });
 }
 
@@ -113,7 +115,7 @@ function createAndSavePair(validUrl) {
       .catch(function(error) {
         reject(error);
       });
-      resolve(newPair.select('original_url short_url'))
+      resolve(newPair)
     })
     .catch(function(error) {
       reject(error);
