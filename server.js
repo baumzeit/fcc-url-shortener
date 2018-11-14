@@ -82,20 +82,14 @@ function validateHostname (urlString) {
 
 function consultWithDatabase (validUrl) {
     return new Promise(function(resolve, reject) {
-      urlPair.findOne({ url: validUrl }, function(err, pair) {
-        if (err) {
-          throw err;
-        }
-        if (pair) {
-          resolve(pair['url_short'])
-        }
-      });
-
-      if (found) {
-        return found;
-      }
-    });
-  }
+      urlPair.findOne({ url: validUrl })
+        .then(function(foundPair) {
+          if (pair) {
+            resolve(pair['url_short'])
+          } else {
+            
+          }
+        })  
 }
 
 function findOneByUrl(validUrl)
