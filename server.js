@@ -32,7 +32,8 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  const url = validateURL(urlString);
+  const result = validateUrl(urlString)
+    
   const 
   res.json({original_url: result});
 });
