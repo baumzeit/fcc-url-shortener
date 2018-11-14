@@ -92,10 +92,18 @@ function consultWithDatabase (validUrl) {
     });
 }
 
-function createPair(validUrl) {
-  var lastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
-  var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ })
-  newPair.save
+function createAndSavePair(validUrl) {
+  return new Promise(function(resolve, reject) {
+  var getLastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
+  getLastId
+  .then(function(lastId) {
+    var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ })
+    newPair.save(data)
+    .catch(error) {
+      throw error;
+    }
+  })
+  .catch
 }
 
 app.listen(port, function () {
