@@ -100,11 +100,11 @@ function consultWithDatabase (validUrl) {
 
 function createAndSavePair(validUrl) {
   return new Promise(function(resolve, reject) {
-    
+   
     var getLastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
     getLastId
     .then(function(lastId) {
-      var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ });
+      var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ || 0 });
       
       console.log("created newPair with id: " + newPair["short_url"])
       
