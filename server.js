@@ -35,16 +35,16 @@ app.post("/api/shorturl/new", function (req, res) {
    
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
-    .then(function(validUrl) {
-      res.json({original_url: validUrl});
+    .then(getShortenedUrlFromDatabase(validUrl))
+    .then(function(shortUrl) {
+      res.json({original_url: urlString});
     }, function(error) {
       res.json({original_url: error});
     });
 });
 
-
-// makes sure that the input string 
 function validateUrlFormat (testString) {
+// checks if the input string follows this format: http(s)://www.example.com(/more/routes)
   return new Promise(function(resolve, reject) {
     const reURL = /https?:\/\/www\.[0-9a-z$–_+!*‘(),]*\.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
     if (reURL.test(testString)) {
@@ -56,17 +56,18 @@ function validateUrlFormat (testString) {
 }                    
 
 function validateHostname (urlString) {
+// checks if the host can be reached
   return new Promise(function(resolve, reject) {
     const hostname = url.parse(urlString).hostname;
     dns.lookup(hostname, function (err, address) {
-    if (err) {
-      reject("Invalid hostname: " + hostname); 
-    } else {
-      resolve(urlString);
-    }
+      if (err) {
+        reject("Invalid hostname: " + hostname); 
+      } else {
+        resolve(urlString);
+      }
+    });
   });
-});
-  }
+}
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
