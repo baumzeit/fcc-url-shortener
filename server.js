@@ -32,16 +32,20 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  await validateUrl(urlString)
   
+  validateUrlFormat(urlString)
+    .then(validateHost)
+    .catch
   
   res.json({original_url: result});
 });
 
+
+
 const validateUrlFormat = async (testString) => {
   const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
   if (reURL.test(testString)) {
-    return testString
+    return testString;
   }
   throw new Error("invalid URL")
 }
@@ -49,19 +53,15 @@ const validateUrlFormat = async (testString) => {
 const validateHost = async (urlString) => {
   try {
     const hostname = url.parse(urlString).hostname;
-    const result = await dns.lookup(hostname, function (err, address) {
+    await dns.lookup(hostname, function (err, address) {
       if (err) {
         throw new Error("invalid hostname"); 
       }
-      return
-      
+      return urlString;
     });
-    } else {
-      errorMsg = 'invalid url';
-    }
-    return errorMsg;
-  catch {
-    
+  }
+  catch(err) {
+    throw new Error("parsing error");
   }
 }
 
