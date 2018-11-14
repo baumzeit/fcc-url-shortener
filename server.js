@@ -38,19 +38,19 @@ app.post("/api/shorturl/new", function (req, res) {
     .then(function(validUrl) {
       res.json({original_url: validUrl});
     }, function(error) {
-      res.json({original_url: 'Error: ' + error});
+      res.json({original_url: error});
     });
 });
 
 
-
+// makes sure that the input string 
 function validateUrlFormat (testString) {
   return new Promise(function(resolve, reject) {
-    const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+    const reURL = /https?:\/\/www\.[0-9a-z$–_+!*‘(),]*\.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
     if (reURL.test(testString)) {
       resolve(testString);
     } else {
-      reject("invalid url")
+      reject("Invalid URL: " + testString)
     }
   });
 }                    
@@ -60,7 +60,7 @@ function validateHostname (urlString) {
     const hostname = url.parse(urlString).hostname;
     dns.lookup(hostname, function (err, address) {
     if (err) {
-      reject("invalid hostname"); 
+      reject("Invalid hostname: " + hostname); 
     } else {
       resolve(urlString);
     }
