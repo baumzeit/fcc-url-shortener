@@ -80,7 +80,7 @@ function validateHostname (urlString) {
   });
 }
 
-async function consultWithDatabase (validUrl) {
+function consultWithDatabase (validUrl) {
   try {
     var found = await urlPair.findOne({ url: validUrl }, function(err, data))
 
