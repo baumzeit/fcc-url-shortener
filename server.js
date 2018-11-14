@@ -20,6 +20,10 @@ process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-sh
 /** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
+var urlSetSchema = new Schema({
+  original_url: { type: String, required: true },
+  short_url: { type: Number, required: true }
+});
 
 app.use(cors());
 
@@ -35,7 +39,7 @@ app.get('/', function(req, res){
   
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
-  const urlString = req.body.url;
+  var urlString = req.body.url;
    
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
@@ -51,7 +55,7 @@ app.post("/api/shorturl/new", function (req, res) {
 function validateUrlFormat (testString) {
 // checks if the input string follows this format: http(s)://www.example(.foobar).com(/more/routes)
   return new Promise(function(resolve, reject) {
-    const reURL = /https?:\/\/www(\.[0-9a-z$\-_+!*‘(),]{1,}){2,}((\/[0-9a-z$\–_+!*‘(),]{1,})+)?/i;
+    var reURL = /https?:\/\/www(\.[0-9a-z$\-_+!*‘(),]{1,}){2,}((\/[0-9a-z$\–_+!*‘(),]{1,})+)?/i;
     if (reURL.test(testString)) {
       resolve(testString);
     } else {
@@ -63,7 +67,7 @@ function validateUrlFormat (testString) {
 function validateHostname (urlString) {
 // checks if the host can be reached
   return new Promise(function(resolve, reject) {
-    const hostname = url.parse(urlString).hostname;
+    var hostname = url.parse(urlString).hostname;
     dns.lookup(hostname, function (err, address) {
       if (err) {
         reject("Invalid hostname: " + hostname); 
