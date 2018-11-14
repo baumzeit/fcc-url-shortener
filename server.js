@@ -84,8 +84,14 @@ function consultWithDatabase (validUrl) {
       urlPair.findOne({ original_url: validUrl })
       .then(function(foundPair) {
         if (foundPair) {
-          resolve(data)
+          
+          console.log("found pair: " + foundPair)
+          
+          resolve(foundPair)
         } else {
+          
+          console.log("not found - need to create")
+          
           resolve(createAndSavePair(validUrl))
         }
       })
@@ -94,16 +100,24 @@ function consultWithDatabase (validUrl) {
 
 function createAndSavePair(validUrl) {
   return new Promise(function(resolve, reject) {
-  var getLastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
-  getLastId
-  .then(function(lastId) {
-    var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ })
-    newPair.save(data)
-    .catch(error) {
-      throw error;
-    }
-  })
-  .catch
+    
+    var getLastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
+    getLastId
+    .then(function(lastId) {
+      var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ });
+      
+      console.log("created newPair with id: " + newPair["short_url"])
+      
+      newPair.save(newPair)
+      .catch(function(error) {
+        throw error;
+      });
+      resolve(newPair)
+    })
+    .catch(function(error) {
+      reject(error);
+    });
+  });
 }
 
 app.listen(port, function () {
