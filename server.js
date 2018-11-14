@@ -81,11 +81,13 @@ function validateHostname (urlString) {
 }
 
 async function consultWithDatabase (validUrl) {
-  var found = urlPair.findOne
+  var found = await findOneByUrl(validUrl)
   return new Promise(function(resolve, reject) {
     resolve(20);
   });
 }
+
+var findOneByUrl(validUrl
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
