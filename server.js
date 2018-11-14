@@ -33,11 +33,13 @@ app.get('/', function(req, res){
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
   
-  validateUrlFormat(urlString)
+  const result = validateUrlFormat(urlString)
     .then(validateHost)
-    .catch
-  
-  res.json({original_url: result});
+    .then(function(validUrl) {
+      res.json({original_url: validUrl});
+    }, function(error) {
+      res.json({original_url: 'Error: ' + error});
+    });
 });
 
 
