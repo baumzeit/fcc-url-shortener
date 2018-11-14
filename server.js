@@ -101,16 +101,13 @@ function consultWithDatabase (validUrl) {
 function createAndSavePair(validUrl) {
   
   return new Promise(function(resolve, reject) {
-    try {
-    var getLastId = urlPair.find({}).sort({ short_url: -1 }).limit(1).then(function(query);
-    }
-    catch(error) {console.log(error)}
-    console.log(getLastId['short_url'], getLastId['original_url'])
+    var getLastId = urlPair.find({}).sort({ short_url: -1 }).limit(1)
+  
     getLastId
-    .then(function(lastId) {
-      var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ || 0 });
+    .then(function(query) {
+      var newPair = new urlPair({ original_url: validUrl, short_url: query[0].short_url++ || 0 });
       
-      console.log("created newPair with id: " + newPair["short_url"])
+      console.log("created newPair with id: " + newPair.short_url)
       
       newPair.save(newPair)
       .catch(function(error) {
