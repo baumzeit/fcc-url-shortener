@@ -21,8 +21,8 @@ process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-sh
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 var urlPairSchema = new Schema({
-  original_url: { type: String, required: true },
-  short_url: { type: Number, required: true }
+  original_url: { type: String, required: true, unique: true },
+  short_url: { type: Number, required: true, unique: true }
 });
 
 var urlPair = mongoose.model('urlPair', urlPairSchema)
@@ -45,7 +45,7 @@ app.post("/api/shorturl/new", function (req, res) {
    
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
-    .then(getShortUrlfromDatabase)
+    .then(consult)
     .then(function(shortUrl) {
       res.json({ original_url: urlString,
                  short_url: shortUrl });
