@@ -32,7 +32,8 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  const result = validateURL(urlString);
+  const url = validateURL(urlString);
+  const 
   res.json({original_url: result});
 });
 
@@ -44,8 +45,7 @@ function validateURL(urlString) {
     const host = url.parse(urlString).hostname;
     const result = dns.lookup(host, function (err, address) {
       if (err) {
-        console.log("host error")
-        return errorMsg = "invalid hostname"; 
+        errorMsg = "invalid hostname"; 
       }
     });
   } else {
