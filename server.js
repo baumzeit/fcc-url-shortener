@@ -32,19 +32,19 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  const result = validateUrl(urlString)
+  const urlError = validateUrl(urlString)
     
-  const 
+  
   res.json({original_url: result});
 });
 
 
-function validateURL(urlString) {
+function async validateURL(urlString) {
   const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
   let errorMsg = "";
   if (reURL.test(urlString)) {
     const host = url.parse(urlString).hostname;
-    const result = dns.lookup(host, function (err, address) {
+    const result = await dns.lookup(host, function (err, address) {
       if (err) {
         errorMsg = "invalid hostname"; 
       }
