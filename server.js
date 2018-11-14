@@ -21,8 +21,8 @@ process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-sh
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 var urlPairSchema = new Schema({
-  original_url: { type: String, required: true, unique: true },
-  short_url: { type: Number, required: true, unique: true }
+  original_url: { type: String, required: true, unique: true, default: "https://www.freecodecamp.com" },
+  short_url: { type: Number, required: true, unique: true, default: 0 }
 });
 
 var urlPair = mongoose.model('urlPair', urlPairSchema)
@@ -101,11 +101,11 @@ function consultWithDatabase (validUrl) {
 function createAndSavePair(validUrl) {
   
   return new Promise(function(resolve, reject) {
-    var getLastId = urlPair.find({}).sort({ short_url: -1 }).limit(1)
-  
-    getLastId
+    var getLastEntry = urlPair.find({}).sort({ short_url: -1 }).limit(1)
+    getLastEntry
     .then(function(query) {
-      var newPair = new urlPair({ original_url: validUrl, short_url: query[0].short_url++ || 0 });
+      var newPair = new urlPair({ original_url: validUrl, 
+                                  short_url: query[0].short_url + 1 });
       
       console.log("created newPair with id: " + newPair.short_url)
       
