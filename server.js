@@ -46,8 +46,8 @@ app.post("/api/shorturl/new", function (req, res) {
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
     .then(consultWithDatabase)
-    .then(function(shortUrl) {
-      res.json(urlPair);
+    .then(function(result) {
+      res.json(result);
     }, function(error) {
       res.json({ original_url: error });
     });
@@ -81,18 +81,22 @@ function validateHostname (urlString) {
 
 function consultWithDatabase (validUrl) {
     return new Promise(function(resolve, reject) {
-      urlPair.findOne({ url: validUrl })
+      urlPair.findOne({ original_url: validUrl })
       .then(function(foundPair) {
         if (foundPair) {
-          resolve(data['url_short'])
+          resolve(data)
         } else {
-          resolve(createPair(validUrl)
+          resolve(createAndSavePair(validUrl))
         }
       })
     });
 }
 
-function findOneByUrl(validUrl)
+function createPair(validUrl) {
+  var lastId = urlPair.sort({ short_url: -1 }).limit(1)["short_url"];
+  var newPair = new urlPair({ original_url: validUrl, short_url: lastId++ })
+  newPair.save
+}
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
