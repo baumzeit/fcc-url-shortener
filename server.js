@@ -32,8 +32,8 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  
- Promise.resolve(validateUrlFormat(urlString))
+   
+  Promise.resolve(validateUrlFormat(urlString))
     .then(validateHost)
     .then(function(validUrl) {
       res.json({original_url: validUrl});
@@ -52,10 +52,12 @@ function validateUrlFormat (testString) {
       resolve(testString);
     }
   reject("invalid url")
-}
+  });
+}                    
 
 function validateHost (urlString) {
   return new Promise(function(resolve, reject) {
+    const urlString = req.body.url;
     dns.lookup(hostname, function (err, address) {
     if (err) {
       reject("invalid hostname"); 
@@ -63,7 +65,8 @@ function validateHost (urlString) {
     console.log("valid host")
     resolve(urlString);
   });
-}
+});
+  }
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
