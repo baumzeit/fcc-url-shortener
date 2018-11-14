@@ -35,11 +35,12 @@ app.post("/api/shorturl/new", function (req, res) {
    
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
-    .then(getShortenedUrlFromDatabase(validUrl))
+    .then(getShortUrlfromDatabase)
     .then(function(shortUrl) {
-      res.json({original_url: urlString});
+      res.json({ original_url: urlString,
+                 short_url: shortUrl });
     }, function(error) {
-      res.json({original_url: error});
+      res.json({ original_url: error });
     });
 });
 
@@ -66,6 +67,12 @@ function validateHostname (urlString) {
         resolve(urlString);
       }
     });
+  });
+}
+
+function getShortUrlfromDatabase (validUrl) {
+  return new Promise(function(resolve, reject) {
+    resolve(20);
   });
 }
 
