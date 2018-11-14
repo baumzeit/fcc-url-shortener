@@ -47,8 +47,7 @@ app.post("/api/shorturl/new", function (req, res) {
     .then(validateHostname)
     .then(consultWithDatabase)
     .then(function(shortUrl) {
-      res.json({ original_url: urlString,
-                 short_url: shortUrl });
+      res.json(urlPair);
     }, function(error) {
       res.json({ original_url: error });
     });
@@ -83,11 +82,11 @@ function validateHostname (urlString) {
 function consultWithDatabase (validUrl) {
     return new Promise(function(resolve, reject) {
       urlPair.findOne({ url: validUrl })
-      .then(function(data) {
-        if (data) {
+      .then(function(foundPair) {
+        if (foundPair) {
           resolve(data['url_short'])
         } else {
-          
+          resolve(createPair(validUrl)
         }
       })
     });
