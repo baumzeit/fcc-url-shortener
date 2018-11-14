@@ -13,9 +13,10 @@ var app = express();
 
 // Basic Configuration 
 var port = process.env.PORT || 3000;
+process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-shortener"
 
 /** this project needs a db !! **/ 
-// mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(cors());
 
@@ -47,7 +48,7 @@ app.post("/api/shorturl/new", function (req, res) {
 function validateUrlFormat (testString) {
 // checks if the input string follows this format: http(s)://www.example.com(/more/routes)
   return new Promise(function(resolve, reject) {
-    const reURL = /https?:\/\/www\.[0-9a-z$–_+!*‘(),]*\.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+    const reURL = /https?:\/\/www(.[0-9a-z$–_+!*‘(),])*\.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
     if (reURL.test(testString)) {
       resolve(testString);
     } else {
