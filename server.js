@@ -32,25 +32,30 @@ app.get('/', function(req, res){
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
-  const urlError = async () => await validateUrl(urlString)
+  await validateUrl(urlString)
   
   
   res.json({original_url: result});
 });
 
-const 
+const validateUrlFormat = async (testString) => {
+  const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+  if (reURL.test(testString)) {
+    return testString
+  }
+  throw new Error("invalid URL")
+}
 
-const urlError = async (url) => {
+const validateHost = async (urlString) => {
   try {
-    const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
-    let errorMsg = "";
-    if (reURL.test(urlString)) {
-      const host = url.parse(urlString).hostname;
-      const result = await dns.lookup(host, function (err, address) {
-        if (err) {
-        errorMsg = "invalid hostname"; 
-        }
-      });
+    const hostname = url.parse(urlString).hostname;
+    const result = await dns.lookup(hostname, function (err, address) {
+      if (err) {
+        throw new Error("invalid hostname"); 
+      }
+      return
+      
+    });
     } else {
       errorMsg = 'invalid url';
     }
