@@ -20,10 +20,12 @@ process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-sh
 /** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
-var urlSetSchema = new Schema({
+var urlPairSchema = new Schema({
   original_url: { type: String, required: true },
   short_url: { type: Number, required: true }
 });
+
+var urlPair = mongoose.model('urlPair', urlPairSchema)
 
 app.use(cors());
 
