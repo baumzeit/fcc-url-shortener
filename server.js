@@ -33,7 +33,7 @@ app.get('/', function(req, res){
 app.post("/api/shorturl/new", function (req, res) {
   const urlString = req.body.url;
   
-  const result = validateUrlFormat(urlString)
+ Promise.resolve(validateUrlFormat(urlString))
     .then(validateHost)
     .then(function(validUrl) {
       res.json({original_url: validUrl});
@@ -44,27 +44,24 @@ app.post("/api/shorturl/new", function (req, res) {
 
 
 
-const validateUrlFormat = async (testString) => {
+function validateUrlFormat (testString) {
   const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
   if (reURL.test(testString)) {
+    console.log("valid url")
     return testString;
   }
-  throw new Error("invalid URL")
+  console.log("invalid url")
 }
 
-const validateHost = async (urlString) => {
-  try {
-    const hostname = url.parse(urlString).hostname;
-    await dns.lookup(hostname, function (err, address) {
-      if (err) {
-        throw new Error("invalid hostname"); 
-      }
-      return urlString;
-    });
-  }
-  catch(err) {
-    throw new Error("parsing error");
-  }
+function validateHost (urlString) {
+  const hostname = url.parse(urlString).hostname;
+  return dns.lookup(hostname, function (err, address) {
+    if (err) {
+      console.log("invalid hostname"); 
+    }
+    console.log("valid host")
+    return urlString;
+  });
 }
 
 app.listen(port, function () {
