@@ -102,17 +102,16 @@ function consultWithDatabase (validUrl) {
 function createAndSavePair(validUrl) {
   
   return new Promise(function(resolve, reject) {
-    var getLastEntry = urlPair.find({}).sort({ short_url: -1 }).limit(1)
-    getLastEntry
-    .then(function(query) {
+    urlPair.count({})
+    .then(function(count) {
       var newPair = new urlPair({ original_url: validUrl, 
-                                  short_url: query[0].short_url + 1 });
+                                  short_url: count + 1 });
       
       console.log("created newPair with id: " + newPair.short_url)
       
       newPair.save(newPair)
       .catch(function(error) {
-        throw error;
+        reject(error);
       });
       resolve(newPair.select('original_url short_url'))
     })
