@@ -45,22 +45,23 @@ app.post("/api/shorturl/new", function (req, res) {
 
 
 function validateUrlFormat (testString) {
-  const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
-  if (reURL.test(testString)) {
-    console.log("valid url")
-    return testString;
-  }
-  console.log("invalid url")
+  return new Promise(function(resolve, reject) {
+    const reURL = /https?:\/\/www.[0-9a-z$–_+!*‘(),]*.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+    if (reURL.test(testString)) {
+      console.log("valid url")
+      resolve(testString);
+    }
+  reject("invalid url")
 }
 
 function validateHost (urlString) {
-  const hostname = url.parse(urlString).hostname;
-  return dns.lookup(hostname, function (err, address) {
+  return new Promise(function(resolve, reject) {
+    dns.lookup(hostname, function (err, address) {
     if (err) {
-      console.log("invalid hostname"); 
+      reject("invalid hostname"); 
     }
     console.log("valid host")
-    return urlString;
+    resolve(urlString);
   });
 }
 
