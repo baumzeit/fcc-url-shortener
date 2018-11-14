@@ -92,10 +92,10 @@ function consultWithDatabase (validUrl) {
           
           console.log("not found - need to create")
           
-          resolve(createAndSavePair(validUrl).catch((error) => { throw error }))
+          resolve(createAndSavePair(validUrl))
         }
       })
-      .catch(error => {reject(error)});
+      .catch((error) => {throw error});
     });
 }
 
@@ -114,7 +114,7 @@ function createAndSavePair(validUrl) {
       .catch(function(error) {
         throw error;
       });
-      resolve(newPair)
+      resolve(newPair.select('original_url short_url'))
     })
     .catch(function(error) {
       reject(error);
