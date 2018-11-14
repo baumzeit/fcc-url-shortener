@@ -45,7 +45,7 @@ app.post("/api/shorturl/new", function (req, res) {
    
   Promise.resolve(validateUrlFormat(urlString))
     .then(validateHostname)
-    .then(consult)
+    .then(consultWithDatabase)
     .then(function(shortUrl) {
       res.json({ original_url: urlString,
                  short_url: shortUrl });
@@ -67,7 +67,7 @@ function validateUrlFormat (testString) {
 }                    
 
 function validateHostname (urlString) {
-// checks if the host can be reached
+// checks if the host can be reached  
   return new Promise(function(resolve, reject) {
     var hostname = url.parse(urlString).hostname;
     dns.lookup(hostname, function (err, address) {
@@ -80,7 +80,8 @@ function validateHostname (urlString) {
   });
 }
 
-function getShortUrlfromDatabase (validUrl) {
+async function consultWithDatabase (validUrl) {
+  var found = urlPair.findOne
   return new Promise(function(resolve, reject) {
     resolve(20);
   });
