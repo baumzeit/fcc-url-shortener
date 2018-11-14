@@ -48,7 +48,7 @@ app.post("/api/shorturl/new", function (req, res) {
 function validateUrlFormat (testString) {
 // checks if the input string follows this format: http(s)://www.example.com(/more/routes)
   return new Promise(function(resolve, reject) {
-    const reURL = /https?:\/\/www(.[0-9a-z$–_+!*‘(),])*\.[0-9a-z$–_+!*‘(),]*((\/[0-9a-z$–_+!*‘(),]{1,})+)?/i;
+    const reURL = /https?:\/\/www(\.[0-9a-z$\-_+!*‘(),]{1,}){2,}((\/[0-9a-z$\–_+!*‘(),]{1,})+)?/i;
     if (reURL.test(testString)) {
       resolve(testString);
     } else {
