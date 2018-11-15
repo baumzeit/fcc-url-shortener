@@ -89,12 +89,12 @@ function consultWithDatabase (validUrl) {
           
           console.log("found pair: " + foundPair)
           
-          resolve(foundPair)
+          return foundPair
         } else {
           
           console.log("not found - need to create")
           
-          resolve(createAndSavePair(validUrl))
+          return createAndSavePair(validUrl)
         }
       })
       .catch(function(error) {
