@@ -48,7 +48,8 @@ app.post("/api/shorturl/new", function (req, res) {
     .then(validateHostname)
     .then(consultWithDatabase)
     .then(function(result) {
-      res.json(result);
+      res.json({ original_url: result.original_url,
+                 short_url: result.short_url });
     }, function(error) {
       res.json({ original_url: error });
     });
