@@ -82,30 +82,30 @@ function validateHostname (urlString) {
 }
 
 function consultWithDatabase (validUrl) {
-    return new Promise(function(resolve, reject) {
+    return ( //new Promise(function(resolve, reject) {
       urlPair.findOne({ original_url: validUrl })
       .then(function(foundPair) {
         if (foundPair) {
           
           console.log("found pair: " + foundPair)
           
-          resolve(foundPair)
+          return(foundPair)
         } else {
           
           console.log("not found - need to create")
           
-          resolve(createAndSavePair(validUrl))
+          return(createAndSavePair(validUrl))
         }
       })
       .catch(function(error) {
         throw error;
-      });
-    });
+      }));
+    //});
 }
 
 function createAndSavePair(validUrl) {
   
-  return new Promise(function(resolve, reject) {
+  return (//new Promise(function(resolve, reject) {
     urlPair.count({})
     .then(function(count) {
       var newPair = new urlPair({ original_url: validUrl, 
@@ -115,14 +115,14 @@ function createAndSavePair(validUrl) {
       
       newPair.save(newPair)
       .catch(function(error) {
-        reject(error);
+        throw error;
       });
-      resolve(newPair)
+      return newPair
     })
     .catch(function(error) {
-      reject(error);
-    });
-  });
+      throw error;
+    }));
+  //});
 }
 
 app.listen(port, function () {
