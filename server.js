@@ -56,9 +56,11 @@ app.post("/api/shorturl/new", function (req, res) {
   } catch(error) { console.log(error) }
 });
 
+  
 app.get("/api/shorturl/:id", function (req, res) {
+  const id = req.params.id;
+  console.log(req.params.id)
   Promise.resolve(function() {
-    const id = req.params.id;
     if (typeof id !== 'number') {
       throw 'Invalid parameter';
     }
