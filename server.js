@@ -56,6 +56,10 @@ app.post("/api/shorturl/new", function (req, res) {
   } catch(error) { console.log(error) }
 });
 
+app.get("/api/shorturl/:id", function (req, res) {
+  
+});
+
 function validateUrlFormat (testString) {
 // checks if the input string follows this format: http(s)://www.example(.foobar).com(/more/routes)
   return new Promise(function(resolve, reject) {
@@ -83,6 +87,7 @@ function validateHostname (urlString) {
 }
 
 function consultWithDatabase (validUrl) {
+//checks if url already exists in database and returns the document - otherwise create new
   return (
     urlPair.findOne({ original_url: validUrl })
     .then(function(foundPair) {
