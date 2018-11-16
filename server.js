@@ -65,12 +65,19 @@ app.get("/api/shorturl/:id", function (req, res) {
     return id;
   })
   .then(function(id) {
-    urlPair.findOne({ short_url: id })
+    return urlPair.findOne({ short_url: id })
+  })
   .then(function(found) {
-    if
+    console.log(found)
+    if (!found) {
+      throw 'No entry found';
+    } else {
+      return res.redirect(found.original_url)
     }
   })
-  
+  .catch(function(error) {
+    res.json({ error: error });  
+  });
 });
 
 function validateUrlFormat (testString) {
