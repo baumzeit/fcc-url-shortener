@@ -57,11 +57,20 @@ app.post("/api/shorturl/new", function (req, res) {
 });
 
 app.get("/api/shorturl/:id", function (req, res) {
-  const id = req.params.id;
-  if (typeof id !== 'number') {
-    res.json({ error: 'Invalid format: /api/shorturl/NOT-A-NUMBER
-  }
-  urlPair.findOne
+  Promise.resolve(function() {
+    const id = req.params.id;
+    if (typeof id !== 'number') {
+      throw 'Invalid parameter';
+    }
+    return id;
+  })
+  .then(function(id) {
+    urlPair.findOne({ short_url: id })
+  .then(function(found) {
+    if
+    }
+  })
+  
 });
 
 function validateUrlFormat (testString) {
@@ -110,9 +119,6 @@ function createAndSavePair(validUrl) {
       var newPair = new urlPair({ original_url: validUrl, 
                                   short_url: count + 1 });
       newPair.save(newPair)
-      .catch(function(error) {
-        throw error;
-      });
       return newPair;
     })
     .catch(function(error) {
