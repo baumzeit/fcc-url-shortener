@@ -51,7 +51,7 @@ app.post("/api/shorturl/new", function (req, res) {
       res.json({ original_url: result.original_url,
                  short_url: result.short_url });
     }, function(error) {
-      res.json({ original_url: error });
+      res.json({ error: error });
     });
   } catch(error) { console.log(error) }
 });
@@ -95,7 +95,6 @@ function consultWithDatabase (validUrl) {
 }
 
 function createAndSavePair(validUrl) {
-  
   return (
     urlPair.count({})
     .then(function(count) {
