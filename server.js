@@ -44,7 +44,7 @@ app.post("/api/shorturl/new", function (req, res) {
   try {
     var urlString = req.body.url;
 
-    Promise.resolve(validateUrlFormat(urlString))
+    validateUrlFormat(urlString)
     .then(validateHostname)
     .then(consultWithDatabase)
     .then(function(result) {
