@@ -57,7 +57,11 @@ app.post("/api/shorturl/new", function (req, res) {
 });
 
 app.get("/api/shorturl/:id", function (req, res) {
-  
+  const id = req.params.id;
+  if (typeof id !== 'number') {
+    res.json({ error: 'Invalid format: /api/shorturl/NOT-A-NUMBER
+  }
+  urlPair.findOne
 });
 
 function validateUrlFormat (testString) {
