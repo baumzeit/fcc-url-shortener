@@ -58,9 +58,10 @@ app.post("/api/shorturl/new", function (req, res) {
 
   
 app.get("/api/shorturl/:id", function (req, res) {
+  try {
   const id = req.params.id;
   if (id.length === 0) {
-    throw ''
+    throw 'Missing parameter'
   }
   return new Promise(function(resolve, reject) {
     const reInt = /^[0-9]*$/gm
