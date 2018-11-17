@@ -59,15 +59,16 @@ app.post("/api/shorturl/new", function (req, res) {
   
 app.get("/api/shorturl/:id", function (req, res) {
   const id = req.params.id;
-  /*Promise.resolve(function() {
-    if (typeof id !== 'number') {
-      throw 'Invalid parameter';
+  return new Promise(function(resolve, reject) {
+    const reInt = /[0-9]{1,}/
+    if (!reInt.test(id)) {
+      reject('Invalid parameter');
     }
-    return id;
+    resolve(id);
   })
-  //.then(function(id) {
-    return*/ urlPair.findOne({ short_url: id })
-  //})
+  .then(function(id) {
+    return urlPair.findOne({ short_url: id })
+  })
   .then(function(found) {
     if (!found) {
       throw ('No entry found with id ' + id);
