@@ -59,10 +59,13 @@ app.post("/api/shorturl/new", function (req, res) {
   
 app.get("/api/shorturl/:id", function (req, res) {
   const id = req.params.id;
+  if (id.length === 0) {
+    throw ''
+  }
   return new Promise(function(resolve, reject) {
-    const reInt = /[0-9]{1,}/
+    const reInt = /^[0-9]*$/gm
     if (!reInt.test(id)) {
-      reject('Invalid parameter');
+      reject('Invalid parameter: ' + id);
     }
     resolve(id);
   })
@@ -71,7 +74,7 @@ app.get("/api/shorturl/:id", function (req, res) {
   })
   .then(function(found) {
     if (!found) {
-      throw ('No entry found with id ' + id);
+      throw ('No entry found with ID: ' + id);
     } else {
       return res.redirect(found.original_url)
     }
