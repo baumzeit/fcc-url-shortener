@@ -59,30 +59,30 @@ app.post("/api/shorturl/new", function (req, res) {
   
 app.get("/api/shorturl/:id", function (req, res) {
   try {
-  const id = req.params.id;
-  if (id.length === 0) {
-    throw 'Missing parameter'
+    const id = req.params.id;
+    return new Promise(function(resolve, reject) {
+      const reInt = /^[0-9]*$/gm
+      if (!reInt.test(id)) {
+        reject('Invalid parameter: ' + id);
+      }
+      resolve(id);
+    })
+    .then(function(id) {
+      return urlPair.findOne({ short_url: id })
+    })
+    .then(function(found) {
+      if (!found) {
+        throw ('No entry found with ID: ' + id);
+      } else {
+        return res.redirect(found.original_url)
+      }
+    })
+    .catch(function(error) {
+      res.json({ error: error });  
+    });
+  } catch (error) {
+    console.log(error);
   }
-  return new Promise(function(resolve, reject) {
-    const reInt = /^[0-9]*$/gm
-    if (!reInt.test(id)) {
-      reject('Invalid parameter: ' + id);
-    }
-    resolve(id);
-  })
-  .then(function(id) {
-    return urlPair.findOne({ short_url: id })
-  })
-  .then(function(found) {
-    if (!found) {
-      throw ('No entry found with ID: ' + id);
-    } else {
-      return res.redirect(found.original_url)
-    }
-  })
-  .catch(function(error) {
-    res.json({ error: error });  
-  });
 });
 
 function validateUrlFormat (testString) {
