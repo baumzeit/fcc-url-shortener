@@ -13,11 +13,8 @@ var cors = require('cors');
 
 var app = express();
 
-// Basic Configuration 
 var port = process.env.PORT || 3000;
-process.env.MONGOLAB_URI = "mongodb://user:pass-0@ds153093.mlab.com:53093/url-shortener"
 
-/** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 var urlPairSchema = new Schema({
@@ -29,7 +26,6 @@ var urlPair = mongoose.model('urlPair', urlPairSchema)
 
 app.use(cors());
 
-/** this project needs to parse POST bodies **/
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/public', express.static(process.cwd() + '/public'));
@@ -38,8 +34,6 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-  
-// your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   try {
     var urlString = req.body.url;
@@ -56,7 +50,6 @@ app.post("/api/shorturl/new", function (req, res) {
   } catch(error) { console.log(error) }
 });
 
-  
 app.get("/api/shorturl/:id", function (req, res) {
   try {
     const id = req.params.id;

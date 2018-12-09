@@ -18,4 +18,4 @@ POST [project_url]/api/shorturl/new - body (urlencoded) :  url=https://www.googl
 
 #### Will redirect to:
 
-http://forum.freecodecamp.org
+http://www.freecodecamp.org
